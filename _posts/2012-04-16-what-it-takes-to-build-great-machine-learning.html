@@ -1,0 +1,98 @@
+--- 
+permalink: /what-it-takes-to-build-great-machine-learning/index.html
+categories: []
+
+title: What it takes to build great machine learning products - O'Reilly Radar
+layout: post
+published: true
+---
+<div class="posterous_bookmarklet_entry">
+      <blockquote><div>
+<h3><a href="http://radar.oreilly.com/2012/04/great-machine-learning-products.html" target="_self">What it takes to build great machine learning products</a></h3>
+<h3>Rich machine learning products come from skilled and knowledgeable teams.</h3>
+<p>by <a href="http://radar.oreilly.com/ariah/index.html" rel="author">Aria Haghighi</a>
+ |&nbsp;<a href="http://twitter.com/aria42">@aria42</a>
+&nbsp;|&nbsp;<a href="https://plus.google.com/u/0/103104201893501018974/posts" rel="me"> Aria Haghighi</a>
+&nbsp;|&nbsp;<a href="http://radar.oreilly.com/2012/04/great-machine-learning-products.html#comments">Comments: 2</a> 
+|&nbsp;<span>16 April 2012</span></p>
+<p><span>
+
+
+<span>
+</span>
+
+
+<span>
+  </span></span></p>
+
+
+
+<span>
+<span></span>
+</span>
+
+
+
+<div>
+
+
+
+
+<p>Machine learning (ML) is all the rage, riding tight on the coattails of the "big data" wave. Like most technology hype, the enthusiasm far exceeds the realization of actual products. Arguably, not since Google's tremendous innovations in the late '90s/early 2000s has algorithmic technology led to a product that has permeated the popular culture. That's not to say there haven't been great ML wins since, but none have as been as impactful or had computational algorithms at their core. Netflix may use recommendation technology, but Netflix is still Netflix without it. There would be no Google if Page, Brin, et al., hadn't exploited the graph structure of the web and anchor text to improve search.</p>
+
+<p>So why is this? It's not for lack of trying. How many startups have aimed to bring natural language processing (NLP) technology to the masses, only to fade into oblivion after people actually <em>try</em> their products? The challenge in building great products with ML lies not in just understanding basic ML theory, but in understanding the domain and problem sufficiently to operationalize intuitions into model design. Interesting problems don't have simple off-the-shelf ML solutions. Progress in important ML application areas, like NLP, come from insights specific to these problems, rather than generic ML machinery. Often, specific insights into a problem and careful model design make the difference between a system that doesn't work at all and one that people will actually use. </p>
+
+<p>The goal of this essay is not to discourage people from building amazing products with ML at their cores, but to be clear about where I think the difficulty lies.</p> 
+
+<h3>Progress in machine learning</h3>
+
+<p>Machine learning has come a long way over the last decade. Before I started grad school, training a large-margin classifier (e.g., <a href="http://en.wikipedia.org/wiki/Support_vector_machine">SVM</a>) was done via <a href="http://en.wikipedia.org/wiki/Support_vector_machine">John Platt's</a> batch <a href="http://en.wikipedia.org/wiki/Sequential_Minimal_Optimization">SMO algorithm</a>. In that case, training time scaled poorly with the amount of training data. Writing the algorithm itself required understanding quadratic programming and was riddled with heuristics for selecting active constraints and black-art parameter tuning. Now, we know how to train a nearly performance-equivalent large-margin classifier in linear time using a (relatively) <a href="http://eprints.pascal-network.org/archive/00004062/01/ShalevSiSr07.pdf">simple online algorithm</a> (PDF). Similar strides have been made in (probabilistic) graphical models: <a href="http://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo">Markov-chain Monte Carlo</a> (MCMC) and <a href="http://en.wikipedia.org/wiki/Variational_method">variational methods</a> have facilitated inference for arbitrarily complex graphical models [<a href="http://radar.oreilly.com/2012/04/great-machine-learning-products.html#note1">1</a>]. Anecdotally, take at look at papers over the last eight years in the proceedings of the <a href="http://www.aclweb.org/">Association for Computational Linguistics</a> (ACL), the premiere natural language processing publication.  A top paper from 2011 has orders of magnitude more technical ML sophistication than one from 2003. </p>
+ 
+<p>On the education front, we've come a long way as well. As an undergrad at Stanford in the early-to-mid 2000s, I took <a href="http://www.ml-class.org/course/auth/welcome">Andrew Ng's ML course</a> and <a href="https://class.coursera.org/pgm/auth/welcome">Daphne Koller's probabilistic graphical model course</a>. Both of these classes were among the best I took at Stanford and were only available to about 100 students a year. Koller's course in particular was not only the best course I took at Stanford, but the one that taught me the most about teaching. Now, anyone can take these courses online. </p>
+
+<p>As an applied ML person — specifically, natural language processing — much of this progress has made aspects of research significantly easier. However, the core decisions I make are not which abstract ML algorithm, loss-function, or objective to use, but what features and structure are relevant  to solving my problem. This skill only comes with practice. So, while it's great that a much wider audience will have an understanding of basic ML, it's not the most difficult part of building intelligent systems.</p>
+
+<h3>Interesting problems are never off the shelf</h3>
+
+<p>The interesting problems that you'd actually want to solve are far messier than the abstractions used to describe standard ML problems. Take <a href="http://en.wikipedia.org/wiki/Machine_translation">machine translation</a> (MT), for example. Naively, MT looks like a <a href="http://en.wikipedia.org/wiki/Classification_in_machine_learning">statistical classification problem</a>: You get an input foreign sentence and have to predict a target English sentence. Unfortunately, because the space of possible English is combinatorially large, you can't treat
+MT as a black-box classification problem. Instead, like most interesting ML applications, MT problems have a lot of structure and part of the job of a good researcher is decomposing the problem into smaller pieces that can be learned or encoded deterministically. My claim is that progress in complex problems like MT comes mostly from how we decompose and structure the solution space, rather than ML techniques used to learn within this space. </p>
+
+<p>Machine translation has improved by leaps and bounds throughout the last decade. I think this progress has largely, but not entirely, come from keen insights into the specific problem, rather than generic ML improvements. Modern statistical MT originates from an amazing paper, "<a href="http://acl.ldc.upenn.edu/J/J93/J93-2003.pdf">The mathematics of statistical machine translation</a>" (PDF), which introduced the <a href="http://en.wikipedia.org/wiki/Noisy_channel_model">noisy-channel architecture</a> on which future MT systems would be based. At a very simplistic level, this is how the model works [<a href="http://radar.oreilly.com/2012/04/great-machine-learning-products.html#note2">2</a>]: For each foreign word, there are potential English translations (including the null word for foreign words that have no English equivalent). Think of this as a probabilistic dictionary. These candidate translation words are then re-ordered to create a plausible English translation. There are many intricacies being glossed over: how to efficiently consider candidate English sentences and their permutations, what model is used to learn the systematic ways in which reordering occurs between languages, and the details about how to score the plausibility of the English candidate (the <a href="http://en.wikipedia.org/wiki/Language_model">language model</a>).</p>  
+
+<p>The core improvement in MT came from changing this model. So, rather than learning translation probabilities of individual words, to instead learn models of how to translate foreign <em>phrases</em> to English phrases. For instance, the German word "abends" translates roughly to the English prepositional phrase "in the evening." Before <a href="http://www.isi.edu/~marcu/papers/phrases-hlt2003.pdf">phrase-based translation</a> (PDF), a word-based model would only get to translate to a single English word, making it unlikely to arrive at the correct English translation [<a href="http://radar.oreilly.com/2012/04/great-machine-learning-products.html#note3">3</a>]. Phrase-based translation generally results in more accurate translations with fluid, idiomatic English output. Of course, adding phrased-based emissions introduces several additional complexities, including how to how to estimate phrase-emissions given that we never observe phrase segmentation; no one tells us that "in the evening" is a phrase that should match up to some foreign phrase. What's surprising here is that there aren't general ML improvements that are making this difference, but problem-specific model design. People can and have implemented more sophisticated ML techniques for various pieces of an MT system. And these do yield improvements, but typically far smaller than good problem-specific research insights.</p>
+
+<p><a href="http://research.google.com/pubs/och.html">Franz Och</a>, one of the authors of the original Phrase-based papers, went on to Google and became the principle person behind the search company's translation efforts. While  the intellectual underpinnings of Google's system go back to Och's days as a research scientist at the <a href="http://www3.isi.edu/home">Information Sciences Institute</a> (and earlier as a graduate student), much of the gains beyond the insights underlying phrase-based translation (and minimum-error rate training, another of Och's innovations) came from a massive software engineering effort to scale these ideas to the web. That effort itself yielded impressive research into large-scale language models and other areas of NLP. It's important to note that Och, in addition to being a world-class researcher, is also, by all accounts, an incredibly impressive hacker and builder. It's this rare combination of skill that can bring ideas all the way from a research project to where <a href="http://translate.google.com/">Google Translate</a> is today.</p>
+
+<h3>Defining the problem</h3>
+
+<p>But I think there's an even bigger barrier beyond ingenious model design and engineering skills. In the case of machine translation and speech recognition, the problem being solved is straightforward to understand and well-specified. Many of the NLP technologies that I think will revolutionize consumer products over the next decade are much vaguer. How, exactly, can we take the excellent research in structured <a href="http://en.wikipedia.org/wiki/Topic_model">topic models</a>, <a href="http://nlpers.blogspot.com/2010/08/why-discourse-structure.html">discourse processing</a>, or <a href="http://en.wikipedia.org/wiki/Sentiment_analysis">sentiment analysis</a> and make a mass-appeal consumer product? </p>
+
+<p>Consider <a href="http://en.wikipedia.org/wiki/Automatic_summarization">summarization</a>. We all know that in some way, we'll want products that summarize and structure content. However, for computational and research reasons, you need to restrict the scope of this problem to something for which you can build a model, an algorithm, and ultimately evaluate. For instance, in the summarization literature, the problem of multi-document summarization is typically formulated as selecting a subset of sentences from the document collection and ordering them. Is this the right problem to be solving? Is the best way to summarize a piece of text a handful of full-length sentences? Even if a summarization is accurate, does the Franken-sentence structure yield summaries that feel inorganic to users? </p>
+
+Or, consider sentiment analysis. Do people really just want a coarse-grained thumbs-up or thumbs-down on a product or event? Or do they want a richer picture of sentiments toward individual aspects of an item (e.g., loved the food, hated the decor)? Do people care about determining sentiment attitudes of individual reviewers/utterances, or producing an accurate assessment of aggregate sentiment?<p></p> 
+
+<p>Typically, these decisions are made by a product person and are passed off to researchers and engineers to implement. The problem with this approach is that ML-core products are intimately constrained by what is technically and algorithmically feasible. In my experience, having a technical understanding of the range of related ML problems can inspire product ideas that might not occur to someone without this understanding. To draw a loose analogy, it's like architecture. So much of the construction of a bridge is constrained by material resources and physics that it doesn't make sense to have people without that technical background design a bridge. </p>
+
+<p>The goal of all this is to say that if you want to build a rich ML product, you need to have a rich product/design/research/engineering team. All the way from the nitty gritty of how ML theory works to building systems to domain knowledge to higher-level product thinking to technical interaction and graphic design; preferably people who are world-class in one of these areas but also good in several. Small talented teams with all of these skills are better equipped to navigate the joint uncertainty with respect to product vision as well as model design. Large companies that have research and product people in entirely different buildings are ill-equipped to tackle these kinds of problems. The ML products of the future will come from startups with small founding teams that have this full context and can all fit in the proverbial garage.</p>
+
+
+
+<p>[1]: Although MCMC is a much older statistical technique, its broad use in large-scale machine learning applications is relatively recent.</p>
+
+<p>[2]: The model is generative, so what's being described here is from the point-of-view of inference; the model's generative story works in reverse.</p>
+
+<p>[3]: IBM model 3 introduced the concept of fertility to allow a given word to generate multiple independent target translation words. While this could generate the required translation, the probability of the model doing so is relatively low.</p>
+
+<p><strong>Related:</strong></p>
+<ul>
+<li> <a href="http://radar.oreilly.com/2012/04/operations-machine-learning-data.html">Operations, machine learning and premature babies</a></li>
+<li> <a href="http://radar.oreilly.com/2011/04/machine-learning-alasdair-allan.html">The quiet rise of machine learning</a></li>
+<li> <a href="http://radar.oreilly.com/2011/02/watson-machine-learning.html">Watson and the future of machine learning</a></li>
+<li> <a href="http://radar.oreilly.com/2011/01/faster-machine-learning.html">Need faster machine learning? Take a set-oriented approach</a></li>
+<li> <a href="http://radar.oreilly.com/2012/03/subject-matter-experts-data-stories-analysis.html">The unreasonable necessity of subject experts</a></li>
+</ul>
+
+
+</div>
+</div></blockquote><div class="posterous_quote_citation">via <a href="http://radar.oreilly.com/2012/04/great-machine-learning-products.html">radar.oreilly.com</a></div>
+    <p></p></div>

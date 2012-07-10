@@ -1,0 +1,82 @@
+--- 
+permalink: /muonlab-why-you-suck-at-estimating-a-lesson-i/index.html
+categories: []
+
+title: "muonlab \xC2\xBB Why you suck at estimating \xE2\x80\x93 a lesson in psychology"
+layout: post
+published: true
+---
+<div class="posterous_bookmarklet_entry">
+      <blockquote><div>
+      <p>We all suck at estimating, regardless of how experienced we are. This is a fact that you should accept. Most of us are either ignorant to this or in denial. There are many ways we try to hide our inadequacies, mostly revolving around mathematical transformations of the form:</p>
+<p>E’ = mE   c</p>
+<p>I.E. make an arbitrary estimate (E), multiply it by some amount (m) and add a bit (c).</p>
+<p>I’m not denying that there is some sense to this, you can spend considerable time and effort refining your favourite m value by tracking your velocity, having regular retrospectives and reflective analyses etc.</p>
+<p>This method alone however is ignorant to significant mental “quirks” which affect the way you think and reason.</p>
+<p>The effects I am talking about are:</p>
+<ul>
+<li>The “halo” effect</li>
+<li>Framing effects</li>
+<li>Overconfidence</li>
+<li>Attribute Substitution</li>
+<li>Base-rate neglect</li>
+<li>Anchoring</li>
+</ul>
+<h3>The “halo” effect</h3>
+<p><a href="http://en.wikipedia.org/wiki/Halo_effect" target="_blank">The “halo” effect</a> is defined as “the influence of a global evaluation on evaluations of individual attributes”. What this means in the realm of software development estimation is that you are likely to estimate the individual parts of a project with a bias towards how you feel about the overall project.</p>
+<p>If you’ve formed an opinion that overall the project will be easy, all your estimates for the component parts are likely to be lower than if you viewed the project as difficult (known as the “devil” effect).</p>
+<p><strong>Pro Tips:</strong></p>
+<ul>
+<li>Ignore prejudices</li>
+<li>Judge tasks independantly</li>
+<li>Don’t “do the easy ones first”</li>
+</ul>
+<h3>Framing effects</h3>
+<p><a href="http://en.wikipedia.org/wiki/Framing_effect_(psychology)" target="_blank">Framing effects</a> refers to the way our mind perceives data differently depending on how it is presented. For example, food which is “90% fat free” sounds much better than food described as “10% fat”.<br />
+When estimating tasks, we are very likely to bias our judgement based on how the requirements are presented. For example, requirements which are positively worded/presented and which sound easy/appealing are much more likely to receive lower estimates.</p>
+<p><strong>Pro Tips:</strong></p>
+<ul>
+<li>Has the way the requirements been worded affected your interpretation?</li>
+<li>Are your judgements of a specific problem being clouded by its surroundings?</li>
+</ul>
+<h3>Overconfidence and Substitution</h3>
+<p>Little weight is given to the quality or quantity of evidence when we form a <a href="http://en.wikipedia.org/wiki/Overconfidence_effect" target="_blank">subjective confidence</a> in our opinions. Instead, our confidence depends largely on the quality of the story we can tell ourselves about the situation. What this means is that we are very likely to be confident in an estimate if we have convinced ourselves that we know what we’re talking about. This may sound obvious, however the devil lies in the detail. Do we really know what we are talking about? Our brains do not like doubt and uncertainty, we are much happier answering questions positively rather than negatively. When estimating a task, we are very likely to jump to a conclusion (underestimate) if the task is familiar to us. How many times have you said “oh yeah that’s simple, it will take X hours” without _really_ thinking it through? This is known as the <a href="http://en.wikipedia.org/wiki/Mere-exposure_effect" target="_blank">mere-exposure effect</a>.</p>
+<p>This is where another problem creeps in, <a href="http://en.wikipedia.org/wiki/Attribute_substitution">attribute substitution</a>. When our brains are faced with a complex question, our sub-conscious often substitutes the problem for a more familiar, easier problem. This often happens without us realising. This leads to misunderstandings of the problem domain and therefore inaccurate estimates.</p>
+<p><strong>Pro Tips:</strong></p>
+<ul>
+<li>Ask yourself why you are confident</li>
+<li>Are you biasing because of familiarity?</li>
+<li>Have you really understood the problem?</li>
+</ul>
+<h3>Base Rate Neglect</h3>
+<p><a href="http://en.wikipedia.org/wiki/Base_rate_fallacy" target="_blank">Base rate neglect</a> or base rate bias is an error which occurs when assessing the probability of something and failing to take into account the prior probability. I use the term here partly in the strictest sense (as defined by Wikipedia above) and partly in a more general sense.<br />
+When we estimate tasks, we often fail to account for the “surrounding” or “prior” cost of the task, such as the complicated merge that will be required after the change, or the reliance on the third party delivering on time, the API documentation being adequate etc.</p>
+<p><strong>Pro Tips:</strong></p>
+<ul>
+<li>Consider all the implications</li>
+<li>What assumptions have you made? – Are they sensible? Really?</li>
+<li>Refuse to estimate unknowns</li>
+</ul>
+<h3>Anchoring</h3>
+<p><a href="http://en.wikipedia.org/wiki/Anchoring">Anchoring</a> is an effect that causes you to bias your estimate based on estimates you’ve already seen or produced. If two developers are discussing an estimate and the first says “10 days”, the second developer is more likely to produce a number closer to “10 days” than if they hadn’t spoken previously. This is one of the main benefits of using <a href="http://en.wikipedia.org/wiki/Planning_poker">planning poker</a>. By avoiding the influence of others until you have produced your estimates, you are much more likely to get a broader range of estimate values.</p>
+<p>You may think broader means worse, but this is not necessarily the case. If one dev thinks a task is “1 day” but another thinks its “10 days” – you’ve identified a problem. Either you have a huge skill disparity, or there has been a fundamental misunderstanding by one or both parties!</p>
+<p><strong>Pro tips:</strong></p>
+<ul>
+<li>Try to view each estimate in isolation, dont let previous numbers skew future ones</li>
+<li>Don’t confer with other estimators until you all have your own value, then justify why they are different</li>
+</ul>
+<h3>Summary</h3>
+<p>When producing estimates be aware of biases and make an conscious effort to spot when you might be making them. Being aware that you are likely to be biased is the  first step in producing more accurate estimates, actually counteracting the biases in practice can be much harder <img src="http://blog.muonlab.com/wp-includes/images/smilies/icon_wink.gif" height="15" alt=";)" width="15" /> </p>
+<p>Remember:</p>
+<ul>
+<li>Estimate alone at first</li>
+<li>Get 2nd (or more) opinions on estimates, but be careful not to cause framing or anchoring biases</li>
+<li>Make a conscious effort to not misinterpret a requirement based on its wording</li>
+<li>Be sure you’ve not jumped to conclusions because of familiarity of the problem</li>
+<li>Review the estimates you produced last. Are they biased based on the estimates your produced first?</li>
+<li>Estimate each task in isolation. Dont let your opinions of other tasks or the whole project effect individual parts</li>
+</ul>
+    </div></blockquote>
+
+<div class="posterous_quote_citation">via <a href="http://blog.muonlab.com/2012/04/12/why-you-suck-at-estimating-a-lesson-in-psychology/">blog.muonlab.com</a></div>
+    <p></p></div>

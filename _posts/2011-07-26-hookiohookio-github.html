@@ -1,0 +1,205 @@
+--- 
+permalink: /hookiohookio-github/index.html
+categories: []
+
+title: hookio/hook.io - GitHub
+layout: post
+published: true
+---
+<div class="posterous_bookmarklet_entry">
+      <blockquote><div><div class="CodeRay">
+  <div class="code"><div class="CodeRay">
+  <div class="code"><pre>__    __    ______     ______    __  ___         __    ______   
+|  |  |  |  /  __  \   /  __  \  |  |/  /        |  |  /  __  \  
+|  |__|  | |  |  |  | |  |  |  | |  '  /         |  | |  |  |  | 
+|   __   | |  |  |  | |  |  |  | |    &lt;          |  | |  |  |  | 
+|  |  |  | |  `--'  | |  `--'  | |  .  \    __   |  | |  `--'  | 
+|__|  |__|  \______/   \______/  |__|\__\  (__)  |__|  \______/  
+
+a full featured i/o framework for node.js</pre></div>
+</div>
+</div>
+</div>
+
+
+<h3>v0.5.2</h3>
+
+<h3>hook.io creates a distributed node.js EventEmitter that works cross-process / cross-platform / cross-browser. Think of it like a real-time event bus that works anywhere JavaScript is supported.</h3>
+
+<h3>You create custom i/o scenarios by picking and choosing from an extensive library of tiny, independent, autonomous "hooks" that seamlessly work together.</h3>
+
+<h3>Features :</h3>
+
+<ul>
+<li>Build large, decoupled, distributed, and fault tolerant I/O heavy applications in node.js</li>
+<li>Create hooks on ANY device that supports JavaScript ( cross-browser support via <a href="http://socket.io">socket.io</a> )</li>
+<li>Throw any block of sync or async code on a new process with a callback</li>
+<li>Easily scale any tcp based messaging infrastructure ( such as clustering socket.io chat rooms in memory ) </li>
+<li>Interprocess Message Publishing and Subscribing done through <a href="https://github.com/hij1nx/EventEmitter2">EventEmitter2</a> and <a href="http://github.com/SubStack/dnode">dnode</a>
+</li>
+<li>Messaging API inherits and mimics Node's native EventEmitter API ( with the help of EventEmitter2 )</li>
+<li>Spawning and Daemonizing of processes handled with <a href="https://github.com/indexzero/forever">Forever</a>
+</li>
+<li>Easily connect / disconnect hooks "hot" without affecting other services</li>
+<li>Core library currently checking in at about ~450 lines of code</li>
+</ul><h3>Available Hooks ( more coming soon )</h3>
+
+<ul>
+<li><a href="http://github.com/hookio/cron">cron</a></li>
+<li><a href="http://github.com/hookio/irc">irc</a></li>
+<li><a href="http://github.com/hookio/helloworld">helloworld</a></li>
+<li><a href="http://github.com/hookio/logger">logger</a></li>
+<li><a href="http://github.com/hookio/mailer">mailer</a></li>
+<li><a href="http://github.com/hookio/request">request</a></li>
+<li><a href="http://github.com/hookio/repl">repl</a></li>
+<li><a href="http://github.com/hookio/twilio">twilio</a></li>
+<li><a href="http://github.com/hookio/twitter">twitter</a></li>
+<li><a href="http://github.com/hookio/webhook">webhook</a></li>
+</ul><h3>Getting Start / Demo</h3>
+
+<div class="CodeRay">
+  <div class="code"><div class="CodeRay">
+  <div class="code"><pre>npm install hook.io-helloworld -g</pre></div>
+</div>
+</div>
+</div>
+
+
+<p>Now run:</p>
+
+<div class="CodeRay">
+  <div class="code"><div class="CodeRay">
+  <div class="code"><pre>hookio-helloworld</pre></div>
+</div>
+</div>
+</div>
+
+
+<p>Spawn up as many as you want. The first one becomes an <code>output</code> ( server ), the rest will become <code>inputs</code> ( clients ). Each helloworld input will emit a hello on an interval. Now watch the i/o party!     </p>
+
+
+
+
+
+<h3>Basic Hello World Syntax</h3>
+
+<p><a href="http://github.com/hookio/helloworld">http://github.com/hookio/helloworld</a></p>
+
+<div>
+<div class="CodeRay">
+  <div class="code"><div class="CodeRay">
+  <div class="code"><pre>#!/usr/bin/env node
+
+var Helloworld = require('hook.io-helloworld').Helloworld; 
+
+var hello = new Helloworld({
+  name: &quot;the-helloworld-hook&quot;,
+  debug: true
+});
+
+hello.start();</pre></div>
+</div>
+</div>
+</div>
+
+</div>
+
+
+<h3>Basic HTTP post / receive Webhook server</h3>
+
+<p><a href="http://github.com/marak/hook.io-webhook">http://github.com/marak/hook.io-webhook</a></p>
+
+<div>
+<div class="CodeRay">
+  <div class="code"><div class="CodeRay">
+  <div class="code"><pre>#! /usr/bin/env node
+var Webhook = require('../lib/webhook').Webhook;
+
+var webhookServer = new Webhook({
+  name: 'webhook-server',
+  port: 9001,
+  debug: true
+});
+
+webhookServer.on('hook::ready', function(){
+  webhookServer.log(this.name, 'http server listening', &quot;9001&quot;);
+  webhookServer.on('*::request', function(event, data) {
+    webhookServer.log(this.name, event, data);
+  });
+});
+
+webhookServer.start();</pre></div>
+</div>
+</div>
+</div>
+
+</div>
+
+
+<h3>Creating custom Hooks</h3>
+
+<h3>Super Simple Hook Logger</h3>
+
+<p>Try connecting this to your Helloworld Hook. For a multi-transport logger that supports: File, Console, Redis, Mongo, and Loggly, use: <a href="http://github.com/hookio/logger"></a><a href="http://github.com/hookio/logger">http://github.com/hookio/logger</a></p>
+
+<div>
+<div class="CodeRay">
+  <div class="code"><div class="CodeRay">
+  <div class="code"><pre>#!/usr/bin/env node
+
+var Hook    = require('hook.io').Hook,
+    colors  = require('colors');
+
+var logger = new Hook({ 
+  name: 'the-logger-hook'
+});
+
+console.log(&quot;Note: You can also just set 'debug' mode to true to get a console logger&quot;);
+
+logger.start();
+
+logger.on('*::*', function(event, data){
+  console.log('custom log event fired' + event + ' ' + JSON.stringify(data))
+});</pre></div>
+</div>
+</div>
+</div>
+
+</div>
+
+
+<h3>Screencasts coming soon...</h3>
+
+<h3>Tests</h3>
+
+<p>Currently all tests require some setup. Eventually they will be compatible with <code>npat</code>:</p>
+
+<div>
+<div class="CodeRay">
+  <div class="code"><div class="CodeRay">
+  <div class="code"><pre>$ cd /path/to/hook.io
+  $ npm install forever
+  $ [sudo] npm link
+  $ cd /path/to/hook.io-helloworld
+  $ [sudo] npm link
+  $ [sudo] npm link hook.io
+  $ cd /path/to/hook.io
+  $ [sudo] npm link hook.io-helloworld
+  $ vows --spec</pre></div>
+</div>
+</div>
+</div>
+
+</div>
+
+
+<h3>Core Hook.io Team</h3>
+
+<p>Marak Squires, Charlie Robbins, Jameson Lee</p>
+
+<h3>Contributors (through code and advice)</h3>
+
+<p>Substack, h1jinx, AvianFlu, Chapel, Dominic Tarr, Tim Smart, tmpvar, kadir pekel, perezd</p></div></blockquote>
+
+<div class="posterous_quote_citation">via <a href="https://github.com/hookio/hook.io">github.com</a></div>
+    <p>Awesome</p></div>

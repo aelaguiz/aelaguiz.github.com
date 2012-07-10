@@ -1,0 +1,176 @@
+--- 
+permalink: /web-development-the-definitive-guide-to-websi/index.html
+categories: []
+
+title: web development - The Definitive Guide To Website Authentication - Stack Overflow
+layout: post
+published: true
+---
+<div class="posterous_bookmarklet_entry">
+      <blockquote><div><h3>PART I: How To Log In</h3>
+
+<ol>
+<li><p>As a rule, CAPTCHAs should be a last resort. They tend to be annoying, often aren't human-solvable, most of them are ineffective against bots, all of them are ineffective against cheap third-world labor (according to OWASP, the current sweatshop rate is $12 per 500 tests), and some implementations are technically illegal in some countries (see link number 1 from the MUST-READ list). If you must use a CAPTCHA, use reCAPTCHA, since it is OCR-hard by definition (since it uses already OCR-misclassified book scans).</p></li>
+<li><p>It is possible to prevent browsers from storing/retrieving a password with the autocomplete tag for forms/input fields. However in the real world, your customers will have many accounts on different systems; it compromises their security if they use the same password for every site. Can you expect them to remember different passwords for every site? There are some good password managers out there, however there are also bad ones - which will become a target for attackers.</p></li>
+<li><p>The <strong>only</strong> (currently practical) way to protect against login interception (packet sniffing) during login is by using a certificate-based encryption scheme (e.g. SSL) or a proven &amp; tested challenge-response scheme (e.g. the Diffie-Hellman-based SRP). <em>Any other method can be easily circumvented</em> by an eavesdropping attacker.
+On that note: hashing the password client-side (e.g. with Javascript) is useless unless it is combined with one of the above - ie. either securing the line with strong encryption or using a tried-and-tested challenge-response mechanism (if you don't know what that is, just know that it is one of the most difficult to prove, most difficult to design, and most difficult to implement concepts in digital security). Hashing the password <em>is</em> effective against <strong>password disclosure</strong>, but not against replay attacks, Man-In-The-Middle attacks / hijackings, or brute-force attacks (since we are handing the attacker both username, salt and hashed password).</p></li>
+<li><p>After sending the authentication tokens, the system needs a way to remember that you have been authenticated - this fact should only ever be stored serverside in the session data. A cookie can be used to reference the session data. Wherever possible, the cookie should have the secure and HTTP Only flags set when sent to the browser. The httponly flag provides some protection against the cookie being read by a XSS attack. The secure flag ensures that the cookie is only sent back via HTTPS, and therefore protects against network sniffing attacks. The value of the cookie should not be predictable. Where a cookie referencing a non-existent session is presented, its value should be replaced immediately to prevent <a href="https://www.owasp.org/index.php/Session_Fixation" rel="nofollow">session fixation</a>. </p></li>
+</ol>
+
+<h3>PART II: How To Remain Logged In - The Infamous "Remember Me" Checkbox</h3>
+
+<p>Persistent Login Cookies ("remember me" functionality) are a danger zone; on the one hand, they are entirely as safe as conventional logins when users understand how to handle them; and on the other hand, they are an enormous security risk in the hands of most users, who use them on public computers, forget to log out, don't know what cookies are or how to delete them, etc.</p>
+
+<p>Personally, I want my persistent logins for the web sites I visit on a regular basis, but I know how to handle them safely. If you are positive that your users know the same, you can use persistent logins with a clean conscience. If not - well, then you're more like me; subscribing to the philosophy that users who are careless with their login credentials brought it upon themselves if they get hacked. It's not like we go to our user's houses and tear off all those facepalm-inducing Post-It notes with passwords they have lined up on the edge of their monitors, either. If people are idiots, then let them eat idiot cake.</p>
+
+<p>Of course, some systems can't afford to have <em>any</em> accounts hacked; for such systems, there is no way you can justify having persistent logins.</p>
+
+<p><strong>If you DO decide to implement persistent login cookies, this is how you do it:</strong></p>
+
+<ol>
+<li><p>First, follow <a href="http://fishbowl.pastiche.org/2004/01/19/persistent_login_cookie_best_practice/" rel="nofollow">Charles Miller's 'Best Practices' article</a> Do not get tempted to follow the <a href="http://jaspan.com/improved_persistent_login_cookie_best_practice" rel="nofollow">'Improved' Best Practices</a> linked at the end of his article. Sadly, the 'improvements' to the scheme are moot.</p></li>
+<li><p>And <strong>DO NOT STORE THE PERSISTENT LOGIN COOKIE (TOKEN) IN YOUR DATABASE, ONLY A HASH OF IT!</strong> The login token is Password Equivalent, so if an attacker got his hands on your database, he could use the tokens to log in to any account, just as if they were cleartext login-password combinations. Therefore, use strong salted hashing (bcrypt / phpass) when storing persistent login tokens.</p></li>
+</ol>
+
+<h3>PART III: Using Secret Questions</h3>
+
+<p><strong>Don't. Never ever use 'secret questions'</strong>. Read the paper from link number 5 from the MUST-READ list. You can ask Sarah Palin about that one, after her AOL email account got hacked during the presidential campaign because the answer to her 'security' question was... (wait for it) ... "Wasilla High School"!</p>
+
+<p>Even with user-specified questions, it is highly likely that most users will choose either:</p>
+
+<ul>
+<li><p>A 'standard' secret question like mother's maiden name or favourite pet</p></li>
+<li><p>A simple piece of trivia that anyone could lift from their blog, LinkedIn profile, or similar</p></li>
+<li><p>Any question that is easier to answer than guessing their password. Which, for any decent password, is every question conceivable.</p></li>
+</ul>
+
+<p><strong>In conclusion, security questions are inherently insecure in all their forms and variations, and should never be employed in an authentication scheme for any reason.</strong></p>
+
+<p>A secondary question is often considered as adequate for fulfilling a requirement for two-factor authentication. While capturing some of the response via clicks rather than typing in theory provides protection against keylogger attacks, it is still just an extension to the password mechanism - and when users are presented with a text box instead of drop-downs on a phishing site, they rarely perceive this as abnormal. Note that you may be able to fulfill your two-factor obligations by using a long-lasting cookie (granted on submission of multiple authentication questions) in place of a security question asked each and every time - but at the expense of user convenience.</p>
+
+<p>The only reason anyone still uses security questions by choice is that is saves the cost of a few support calls from users who can't remember their email passwords to get to their reactivation codes. At the expense of security and Sara Palin's reputation, that is. Worth it? You be the judge.</p>
+
+<h3>PART IV: Forgotten Password Functionality</h3>
+
+<p>I already mentioned why you should <strong>never use security questions</strong> for handling forgotten/lost user passwords. There are at least two more all-too-common pitfalls to avoid in this field:</p>
+
+<ol>
+<li><p>Don't RESET user's passwords no matter what - 'reset' passwords are harder for the user to remember, which means he MUST either change it OR write it down - say, on a bright yellow Post-It on the edge of his monitor. Instead, just let users pick a new one right away - which is what they want to do anyway.</p></li>
+<li><p>Always hash the lost password code/token in the database. <strong><em>AGAIN</em></strong>, this code is another example of a Password Equivalent, so it MUST be hashed in case an attacker got his hands on your database. When a lost password code is requested, send the plaintext code to the user's email address, then hash it, save the hash in your database -- and <em>throw away the original</em>. Just like a password or a persistent login token.</p></li>
+</ol>
+
+<p>A final note: always make sure your interface for entering the 'lost password code' is at least as secure as your login form itself, or an attacker will simply use this to gain access instead. Making sure you generate very long 'lost password codes' (e.g. 16 case sensitive alphanumeric characters) is a good start, but consider adding the same throttling that you do for logins.</p>
+
+<h3>PART V: Checking Password Strength</h3>
+
+<p>First, you'll want to read this small article for a reality check: <a href="http://www.whatsmypass.com/?p=415" rel="nofollow">The 500 most common passwords</a></p>
+
+<p>Okay, so maybe the list isn't the <em>canonical</em> list of most common passwords on <em>any</em> system <em>anywhere ever</em>, but it's a good indication of how poorly people will choose their passwords when there is no enforced policy in place. Plus, the list looks frighteningly close to home when you compare it to the publicly available analyses of 40.000  recently stolen MySpace passwords.</p>
+
+<p>Well, enough MySpace-bashing for now. Moving on..</p>
+
+<p>So: With no minimum password strength requirements, 2% of users use one of the top 20 most common passwords. Meaning: if an attacker gets just 20 attempts, 1 in 50 accounts on your website will be crackable.</p>
+
+<p>Luckily, thwarting it is as easy as dropping a Javascript validation algorithm on your user registration form (and duplicating it server-side in case Javascript is turned off). There are simple algorithms for determining password strength client-side, and <strong>although I haven't tested it properly</strong>, I would recommend <a href="http://rumkin.com/tools/password/passchk.php" rel="nofollow">Tyler Atkins' password strength checker</a>:</p>
+
+<h3>PART VI: Much More - Or: Preventing Rapid-Fire Login Attempts</h3>
+
+<p>First, have a look at the numbers: <a href="http://www.lockdown.co.uk/?pg=combi&amp;s=articles" rel="nofollow">Password Recovery Speeds - How long will your password stand up</a></p>
+
+<p>If you don't have the time to look through the tables in that link, here's the gist of them:</p>
+
+<ol>
+<li><p>It takes <em>virtually no time</em> to crack a weak password, even if you're cracking it with an abacus</p></li>
+<li><p>It takes <em>virtually no time</em> to crack an alphanumeric 9-character password, if it is <strong>case insensitive</strong></p></li>
+<li><p>It takes <em>virtually no time</em> to crack an intricate, symbols-and-letters-and-numbers, upper-and-lowercase password, if it is <strong>less than 8 characters long</strong> (a desktop PC can search the FULL KEYSPACE up to 7 characters in less than 90 days)</p></li>
+<li><p><strong>It would, however, take an inordinate amount of time to crack even a 6-character password, <em>if you were limited to one attempt per second!</em></strong></p></li>
+</ol>
+
+<p>So what can we learn from these numbers? Well, lots, but we can focus on the most important part: the fact that preventing large numbers of rapid-fire successive login attempts (ie. the <em>brute force</em> attack) really isn't that difficult. But preventing it <em>right</em> isn't as easy as it seems.</p>
+
+<p>Generally speaking, you have three choices that are all effective against brute-force attacks <em>(and dictionary attacks, but since you are already employing a strong passwords policy, they shouldn't be an issue)</em>:</p>
+
+<ul>
+<li><p>Present a <strong>CAPTCHA</strong> after N failed attempts (annoying as hell and often ineffective -- but I'm repeating myself here)</p></li>
+<li><p><strong>Locking accounts</strong> and requiring email verification after N failed attempts (this is a DoS attack waiting to happen)</p></li>
+<li><p>And finally, <strong>login throttling</strong>: that is, setting a time delay between attempts after N failed attempts (yes, DoS attacks are still possible, but at least they are far less likely and a lot more complicated to pull off)</p></li>
+</ul>
+
+<p><strong>Best practice #1:</strong> A short time delay that increases with the number of failed attempts, like:</p>
+
+<ul>
+<li>1 failed attempt = no delay</li>
+<li>2 failed attempts = 2 sec delay</li>
+<li>3 failed attempts = 4 sec delay</li>
+<li>4 failed attempts = 8 sec delay</li>
+<li>5 failed attempts = 16 sec delay</li>
+<li>etc.</li>
+</ul>
+
+<p>DoS attacking this scheme <em>would</em> be very impractical, but on the other hand, potentially devastating, since the delay increases exponentially. A DoS attack lasting a few days could suspend the user for weeks.</p>
+
+<p><em>(this section is a bit confused - by delaying the response to login you are telling the attacker that the login is not valid - i.e. you need to add delays for valid logins - or apply a refractory period during which logins from a particular account are not accepted - but this must be short enough so you are not supplying a mechanism for known accounts to be DOSed)</em></p>
+
+<p><strong>Best practice #2:</strong> A medium length time delay that goes into effect after N failed attempts, like:</p>
+
+<ul>
+<li>1-4 failed attempts = no delay</li>
+<li>5 failed attempts = 15-30 min delay</li>
+</ul>
+
+<p>DoS attacking this scheme would be quite impractical, but certainly doable. Also, it might be relevant to note that such a long delay can be very annoying for a legitimate user. Forgetful users will dislike you.</p>
+
+<p><strong>Best practice #3:</strong> Combining the two approaches - either a fixed, short time delay that goes into effect after N failed attempts, like:</p>
+
+<ul>
+<li>1-4 failed attempts = no delay</li>
+<li>5  failed attempts = 20 sec delay</li>
+</ul>
+
+<p>Or, an increasing delay with a fixed upper bound, like:</p>
+
+<ul>
+<li>1 failed attempt = 5 sec delay</li>
+<li>2 failed attempts = 15 sec delay</li>
+<li>3  failed attempts = 45 sec delay</li>
+</ul>
+
+<p>This final scheme was taken from the OWASP best-practices suggestions (link 1 from the MUST-READ list), and should be considered best practice, even if it is admittedly on the restrictive side.</p>
+
+<blockquote>
+  <p><em>As a rule of thumb however, I would say: the stronger your password policy is, the less you have to bug users with delays. If you require strong (case-sensitive alphanumerics   required numbers and symbols) 9  character passwords, you could give the users 2-4 non-delayed password attempts before activating the throttling.</em></p>
+</blockquote>
+
+<p>DoS attacking this final login throttling scheme would be <strong><em>very</em></strong> impractical. And as a final touch, always allow persistent (cookie) logins (and/or a CAPTCHA-verified login form) to pass through, so legitimate users won't even be delayed <em>while the attack is in progress</em>. That way, the very impractical DoS attack becomes an <em>extremely</em> impractical attack.</p>
+
+<p>Additionally, it makes sense to do more aggressive throttling on admin accounts, since those are the most attractive entry points</p>
+
+<h3>PART VII: Distributed Brute Force Attacks</h3>
+
+<p>Just as an aside, more advanced attackers will try to circumvent login throttling by 'spreading their activities':</p>
+
+<ul>
+<li><p>Distributing the attempts on a botnet to prevent IP address flagging</p></li>
+<li><p>Rather than picking one user and trying the 50.000 most common passwords (which they can't, because of our throttling), they will pick THE most common password and try it against 50.000 users instead. That way, not only do they get around maximum-attempts measures like CAPTCHAs and login throttling, their chance of success increases as well, since the number 1 most common password is far more likely than number 49.995</p></li>
+<li><p>Spacing the login requests for each user account, say, 30 seconds apart, to sneak under the radar</p></li>
+</ul>
+
+<p>Here, the best practice would be <strong>logging the number of failed logins, system-wide</strong>, and using a running average of your site's bad-login frequency as the basis for an upper limit that you then impose on all users.</p>
+
+<p>Too abstract? Let me rephrase:</p>
+
+<p>Say your site has had an average of 120 bad logins per day over the past 3 months. Using that (running average), your system might set the global limit to 3 times that -- ie. 360 failed attempts over a 24 hour period. Then, if the total number of failed attempts across all accounts exceeds that number within one day (or even better, monitor the rate of acceleration and trigger on a calculated treshold), it activates system-wide login throttling - meaning short delays for ALL users (still, with the exception of cookie logins and/or backup CAPTCHA logins).</p>
+
+<p>I also posted a question with <a href="http://stackoverflow.com/questions/479233/what-is-the-best-distributed-brute-force-countermeasure">more details and a really good discussion of how to avoid tricky pitfals</a> in fending off distributed brute force attacks</p>
+
+<h3>MUST-READ LINKS About Web Authentication</h3>
+
+<ul>
+<li><a href="http://www.owasp.org/index.php/Guide_to_Authentication" rel="nofollow">OWASP Guide To Authentication</a></li>
+<li><a href="http://www.cs.umass.edu/~kevinfu/papers/webauth_tr.pdf" rel="nofollow">Dos and Don’ts of Client Authentication on the Web (very readable MIT research paper)</a></li>
+<li><a href="http://fishbowl.pastiche.org/2004/01/19/persistent_login_cookie_best_practice/" rel="nofollow">Charles Miller's Persistent Login Cookie Best Practice</a></li>
+<li><a href="http://en.wikipedia.org/wiki/HTTP_cookie#Drawbacks_of_cookies" rel="nofollow">Wikipedia: HTTP cookie</a></li>
+<li><a href="http://cups.cs.cmu.edu/soups/2008/proceedings/p13Rabkin.pdf" rel="nofollow">Personal knowledge questions for fallback authentication: Security questions in the era of Facebook (very readable Berkeley research paper)</a></li>
+</ul>
+</div></blockquote><div class="posterous_quote_citation">via <a href="http://stackoverflow.com/questions/549/the-definitive-guide-to-website-authentication/">stackoverflow.com</a></div>
+    <p></p></div>

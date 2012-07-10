@@ -1,0 +1,49 @@
+--- 
+permalink: /fun-one/index.html
+categories: []
+
+title: Fun one
+layout: post
+published: true
+---
+<p>Just had a good one.</p>
+<p>&nbsp;</p>
+<p>In the python bindings to libsvm:</p>
+<p>self.print_func = cast(None, PRINT_STRING_FUN)</p>
+<p>Further down, in the same function:</p>
+<p>&nbsp;</p>
+<p>&nbsp;elif argv[i] == "-q":</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.print_func = PRINT_STRING_FUN(print_null)</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>So if you specify "-q" then they'll set the print_func arg to an actual function, otherwise it's basically a null pointer.</p>
+<p>&nbsp;</p>
+<p>That's great except for then they unconditionally do this,&nbsp;</p>
+<p>libsvm.svm_set_print_string_function(self.print_func)</p>
+<p>&nbsp;</p>
+<p>Which is great except for this code in libsvm:</p>
+<p>&nbsp;</p>
+<p>#if 1</p>
+<p>static void info(const char *fmt,...)</p>
+<p>{</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; char buf[BUFSIZ];</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; va_list ap;</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; va_start(ap,fmt);</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; vsprintf(buf,fmt,ap);</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; va_end(ap);</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; (*svm_print_string)(buf);</p>
+<p>}</p>
+<p>#else</p>
+<p>static void info(const char *fmt,...) {}</p>
+<p>#endif</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>So basically UNLESS you specify -q, you will get this awesome semi-random crash:</p>
+<p>Python(68463,0x102701000) malloc: *** mmap(size=3327647932771958784) failed (error code=12)</p>
+<p>&nbsp;</p>
+<p>*** error: can't allocate region</p>
+<p>*** set a breakpoint in malloc_error_break to debug</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Interestingly it happend EVERY time when I was running via pp, but just a regular single proc run it was fairly rare.&nbsp;</p>
+<p>Now do I submit a patch or do I just make my code specify -q?&nbsp;</p>
